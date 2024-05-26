@@ -24,6 +24,7 @@ import {
 import { uuid } from 'utils/common';
 import { PATH_SEPARATOR, getDirectoryName, getSubdirectoriesFromRoot } from 'utils/common/platform';
 import { parseQueryParams, splitOnFirst, stringifyQueryParams } from 'utils/url';
+import { getEnvironmentVariables } from 'utils/collections';
 
 const initialState = {
   collections: [],
@@ -1329,7 +1330,8 @@ export const collectionsSlice = createSlice({
         if (type === 'request-queued') {
           collection.runnerResult.items.push({
             uid: request.uid,
-            status: 'queued'
+            status: 'queued',
+            scenario: getEnvironmentVariables(collection).currentScenario
           });
         }
 

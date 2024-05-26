@@ -9,6 +9,7 @@ import { IconRefresh, IconCircleCheck, IconCircleX, IconCheck, IconX, IconRun } 
 import slash from 'utils/common/slash';
 import ResponsePane from './ResponsePane';
 import StyledWrapper from './StyledWrapper';
+import { getEnvironmentVariables } from 'utils/collections';
 
 const getRelativePath = (fullPath, pathname) => {
   // convert to unix style path
@@ -153,6 +154,8 @@ export default function RunnerResults({ collection }) {
               <div key={item.uid}>
                 <div className="item-path mt-2">
                   <div className="flex items-center">
+                    <strong>[Scenario: {item.scenario}]</strong>
+
                     <span>
                       {item.status !== 'error' && item.testStatus === 'pass' ? (
                         <IconCircleCheck className="test-success" size={20} strokeWidth={1.5} />
