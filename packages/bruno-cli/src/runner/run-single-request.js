@@ -187,6 +187,7 @@ const runSingleRequest = async function (
     }
 
     let response, responseTime;
+    console.log(chalk.blue(`Scenario: ${envVariables.currentScenario}`));
     try {
       // run request
       const axiosInstance = makeAxiosInstance();
