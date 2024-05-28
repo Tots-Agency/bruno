@@ -466,7 +466,7 @@ const handler = async function (argv) {
         if (nextRequestIdx >= 0) {
           currentRequestIndex = nextRequestIdx;
         } else {
-          console.error("Could not find request with name '" + nextRequestName + "'");
+          console.log(chalk.red("Could not find request with name '" + nextRequestName + "'"));
           currentRequestIndex++;
         }
       } else {
