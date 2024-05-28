@@ -195,7 +195,7 @@ const runSingleRequest = async function (
       prevScenario != envVariables.currentScenario &&
       envVariables.currentScenario != RUN_ALL_SCENARIOS
     ) {
-      console.log('\n\n');
+      console.log('\n');
       console.log(chalk.blue(`Scenario: ${envVariables.currentScenario}`));
     }
 
