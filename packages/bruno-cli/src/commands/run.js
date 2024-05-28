@@ -413,11 +413,15 @@ const handler = async function (argv) {
 
     let currentRequestIndex = 0;
     let nJumps = 0; // count the number of jumps to avoid infinite loops
+    let prevScenario = [];
+    let i = 0;
+
     while (currentRequestIndex < bruJsons.length) {
       const iter = bruJsons[currentRequestIndex];
       const { bruFilepath, bruJson } = iter;
 
       const start = process.hrtime();
+      prevScenario[i] = envVars.currentScenario;
       const result = await runSingleRequest(
         bruFilepath,
         bruJson,
@@ -426,8 +430,10 @@ const handler = async function (argv) {
         envVars,
         processEnvVars,
         brunoConfig,
-        collectionRoot
+        collectionRoot,
+        prevScenario[i - 1]
       );
+      i++;
 
       results.push({
         ...result,

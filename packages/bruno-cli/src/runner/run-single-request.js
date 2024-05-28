@@ -17,6 +17,7 @@ const { SocksProxyAgent } = require('socks-proxy-agent');
 const { makeAxiosInstance } = require('../utils/axios-instance');
 const { addAwsV4Interceptor, resolveAwsV4Credentials } = require('./awsv4auth-helper');
 const { shouldUseProxy, PatchedHttpsProxyAgent } = require('../utils/proxy-util');
+const { SCENARIOS_HANDLER_FILENAME, RUN_ALL_SCENARIOS } = require('../constants');
 
 const protocolRegex = /^([-+\w]{1,25})(:?\/\/|:)/;
 
@@ -28,7 +29,8 @@ const runSingleRequest = async function (
   envVariables,
   processEnvVars,
   brunoConfig,
-  collectionRoot
+  collectionRoot,
+  prevScenario
 ) {
   try {
     let request;
@@ -187,7 +189,16 @@ const runSingleRequest = async function (
     }
 
     let response, responseTime;
-    console.log(chalk.blue(`Scenario: ${envVariables.currentScenario}`));
+
+    if (
+      !!envVariables.currentScenario &&
+      prevScenario != envVariables.currentScenario &&
+      envVariables.currentScenario != RUN_ALL_SCENARIOS
+    ) {
+      console.log('\n\n');
+      console.log(chalk.blue(`Scenario: ${envVariables.currentScenario}`));
+    }
+
     try {
       // run request
       const axiosInstance = makeAxiosInstance();
@@ -252,10 +263,12 @@ const runSingleRequest = async function (
 
     response.responseTime = responseTime;
 
-    console.log(
-      chalk.green(stripExtension(filename)) +
-        chalk.dim(` (${response.status} ${response.statusText}) - ${responseTime} ms`)
-    );
+    if (stripExtension(filename) != SCENARIOS_HANDLER_FILENAME) {
+      console.log(
+        chalk.green(stripExtension(filename)) +
+          chalk.dim(` (${response.status} ${response.statusText}) - ${responseTime} ms`)
+      );
+    }
 
     // run post-response vars
     const postResponseVars = get(bruJson, 'request.vars.res');
